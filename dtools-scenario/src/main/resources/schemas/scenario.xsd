@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+           version="2.1" jxb:version="1.0">
+    <xs:element name="scenario">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="configuration">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name=order">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="INORDER"/>
+                                        <xs:enumeration value="RANDOM"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="connection">
+                                <xs:complexType>
+                                    <xs:choice>
+                                        <xs:element name="jms">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="profile">
+                                                        <xs:simpleType>
+                                                            <xs:restriction base="xs:string">
+                                                                <xs:enumeration value="TIBCO"/>
+                                                                <xs:enumeration value="ACTIVEMQ/>
+                                                            </xs:restriction>
+                                                        </xs:simpleType>
+                                                    </xs:element>
+                                                    <xs:element name="username" type="xs:string"/>
+                                                    <xs:element name="password" type="xs:string"/>
+                                                    <xs:element name="keystore" type="xs:string"/>
+                                                    <xs:element name="keystorePassword" type="xs:string"/>
+                                                    <xs:element name="location" type="xs:string"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:choice>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="sharedProperties" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="property" type="xs:string" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="messages" type="messagesType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="allTypes">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <jxb:property name="items"/>
+                    </xs:appinfo>
+                </xs:annotation>
+                <xs:element name="message" type="messageType"/>
+                <xs:element name="oneOf" type="allTypes"/>
+                <xs:element name="anyOf" type="allTypes"/>
+                <xs:element name="allOf" type="allTypes"/>
+            </xs:choice>
+            <xs:element minOccurs="0" name="conditions" type="conditionsType"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="conditionsTypes">
+        <xs:sequence>
+            <xs:element name="condition type="conditionType"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="nonMessageTypes">
+        <xs:choice maxOccurs="unbounded">
+            <xs:annotation>
+                <xs:appinfo>
+                    <jxb:property name="items"/>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:element name="oneOf" type="allTypes"/>
+            <xs:element name="anyOf" type="allTypes"/>
+            <xs:element name="allOf" type="allTypes"/>
+        </xs:choice>
+    </xs:complexType>
+    
+    <xs:complexType name="conditionTypes">
+        <xs:complexContent>
+            <xs:extension base="nonMessageTypes">
+                <xs:attribute name="value" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="messagesType">
+        <xs:complexContent>
+            <xs:extension base="nonMessageTypes">
+                <xs:attribute name="repeat" type="xs:positiveInteger" />
+                <xs:attribute name="share" type="xs:positiveInteger" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="messageType">
+        <xs:sequence>
+            <xs:element name="key" type="xs:string"/>
+            <xs:element name="destination" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
