@@ -18,9 +18,6 @@
         <java.version>1.8</java.version>
         <lombok.version>1.16.4</lombok.version>
         <guava.version>23.0</guava.version>
-        <amf.jms.activemq.version>2.3.0</amf.jms.activemq.version>
-        <amf.jms.tibco.version>2.1.0</amf.jms.tibco.version>
-        <jblocks.version>7.0.9<jblocks.version>
     </properties>
     
     <dependencies>
